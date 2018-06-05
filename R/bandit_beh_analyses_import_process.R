@@ -854,45 +854,5 @@ contrasts(sdf$GroupLeth) <-
   contr.treatment(levels(sdf$GroupLeth),
                   base = which(levels(sdf$GroupLeth) == 'HL Attempters'))
 
-# check parameter stability for RL models: poor
-params1 <- beh_sub_df[,c(2,19,65:68)]
-params1 = params1 %>% as_tibble %>% arrange(ID)
-
-tmp <- sub_df[,c(2,19,65:68)]
-params2 = list()
-
-params2$ID <- tmp$ID
-params2$L2 <- tmp$L_vba_mfx
-params2$alpha_win2 <- tmp$alpha_win_mfx_data
-params2$alpha_loss2 <- tmp$alpha_loss_mfx_data
-params2$decay2 <- tmp$decay_mfx_data
-params2$beta2 <- tmp$beta_mfx_data
-params2 = params2 %>% as_tibble %>% arrange(ID)
-params <- merge(params1,params2)
-cormat <- psych::corr.test(params[,2:11], method = "spearman")
-pdf("bandit horror plot test retest params.pdf", width=14, height=14)
-
-corrplot(cormat$r, cl.lim=c(-1,1),
-         method = "circle", tl.cex = 1.5, type = "upper", tl.col = 'black',
-         diag = FALSE,
-         addCoef.col="black", addCoefasPercent = FALSE,
-         p.mat = cormat$p, sig.level=0.05, insig = "blank")
-dev.off()
-
-# make merged df of the two behavioral samples
-rdf$sample <- '1'
-sdf$sample <- '2'
-rdf$study <- '1'
-sdf$study <- '1'
-gdf$study <- '2'
-mdf <- rbind(as.data.frame(rdf), as.data.frame(sdf))
-contrasts(mdf$Group) <-
-  contr.treatment(levels(mdf$Group),
-                  base = which(levels(mdf$Group) == 'Attempters'))
-
-
-
-
-
 
 save(list = ls(all.names = TRUE), file = "bandit1.RData")
