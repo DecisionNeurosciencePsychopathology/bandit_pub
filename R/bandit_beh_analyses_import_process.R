@@ -1,6 +1,6 @@
 # import, check and prepare for analyses data from two bandit samples
 
-setwd("~/Box Sync/skinner/projects_analyses/Project Bandit/R/finalized_samples/")
+# setwd("~/Box Sync/skinner/projects_analyses/Project Bandit/R/finalized_samples/")
 library(readr)
 library(lme4)
 library(lmerTest)
@@ -30,7 +30,7 @@ library(dplyr)
 ###################
 # merge and check
 trial_df <-
-  read_csv("~/Box Sync/skinner/projects_analyses/Project Bandit/R/finalized_samples/bandit_fMRI_dfs/bandit_df1.csv")
+  read_csv("./data/bandit_fMRI_dfs/bandit_df1.csv")
 
 #View(trial_df)
 sub_df <-
@@ -38,22 +38,14 @@ sub_df <-
 #View(sub_df)
 sub_df = sub_df %>% as_tibble %>% arrange(ID)
 
-# note -- missing lethality on 221298, from Michelle: I’m cc’ing Alex since Jon also asked me about this last week, and I want to double check what I think the lethality rating would be. Pt reports that she was intubated s/p OD at a UPMC hospital, but there are no records; and this is just noted per pt report in her WPIC records. My guess at lethality would be 7, but there is no record verifying this.
-# thus
-sub_df$ID[sub_df$group12467==5]
-sub_df$max_lethality[sub_df$ID==221298] <- 7
-sub_df$group12467[sub_df$ID==221298] <- 7
 
-
-# there were also three subjects concurrently enrolled in bSocial with missing group variable, check below:
+# there were three subjects concurrently enrolled in bSocial with missing group variable, check below:
 sub_df$ID[sub_df$group12467==0]
 sub_df$max_lethality[sub_df$group12467==0]
 # code them from attempt lethality ratings
 sub_df$group1245[sub_df$group12467==0] <- 5
 sub_df$group12467[sub_df$max_lethality>0 & sub_df$max_lethality<4] <- 6
 sub_df$group12467[sub_df$max_lethality>3] <- 7
-
-
 
 sub_df$group1245 <- as.factor(sub_df$group1245)
 sub_df$group12467 <- as.factor(sub_df$group12467)
@@ -335,10 +327,10 @@ gdf <- bdf[!bdf$bad,]
 # read in data form larger behavioral sample
 
 beh_trial_df <-
-  read_csv("~/Box Sync/skinner/projects_analyses/Project Bandit/R/finalized_samples/bandit_behav_dfs/bandit_df1.csv")
+  read_csv("./data/bandit_behav_dfs/bandit_df1.csv")
 # View(beh_trial_df)
 beh_sub_df <-
-  read_csv("~/Box Sync/skinner/projects_analyses/Project Bandit/R/finalized_samples/bandit_behav_dfs/bandit_df2.csv")
+  read_csv("./data/bandit_behav_dfs/bandit_df2.csv")
 # View(beh_sub_df)
 
 beh_ids <- unique(beh_sub_df$ID)
